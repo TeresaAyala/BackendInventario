@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
+
 const recibosController = require('../controllers/recibosController');
 const { auth, checkRole } = require('../middlewares/authMiddleware');
 
+router.post('/',auth,checkRole('ADMIN', 'EMPLEADO'),recibosController.createRecibo);
+router.get('/',auth,checkRole('ADMIN', 'EMPLEADO'),recibosController.getRecibos);
+router.get('/historial',auth,checkRole('ADMIN'),recibosController.getHistorialRecibos);
+router.get('/:id',auth,checkRole('ADMIN', 'EMPLEADO'),recibosController.getReciboById);
+router.put('/anular/:id',auth,checkRole('ADMIN'), recibosController.anularRecibo);
 
-router.get('/', auth, checkRole('ADMIN', 'SALES'), recibosController.getRecibos);
-router.get('/:id', auth, checkRole('ADMIN', 'SALES'), recibosController.getReciboById);
-router.post('/', auth, checkRole('ADMIN', 'SALES'), recibosController.createRecibo);
 
 module.exports = router;

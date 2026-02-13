@@ -27,9 +27,12 @@ const ProductoSchema = new mongoose.Schema({
         required: [true, 'La cantidad es obligatoria'],
         min: [0, 'La cantidad no puede ser negativa']
     },
+
     imagen: {
-        type: String
+    type: String,
+    default: null
     },
+
     estadoStock: {
         type: String,
         enum: {
@@ -38,7 +41,10 @@ const ProductoSchema = new mongoose.Schema({
         },
         default: 'DISPONIBLE'
     }
-}, {
+
+},
+
+ {
     timestamps: true
 });
 

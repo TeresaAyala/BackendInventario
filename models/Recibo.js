@@ -4,7 +4,7 @@ const ReciboSchema = new mongoose.Schema({
     folio: {
         type: String,
         required: [true, 'El número de folio es obligatorio'],
-        unique: [true, 'El folio ya existe'],
+        unique: true,
         trim: true
     },
     fecha: {
@@ -14,37 +14,24 @@ const ReciboSchema = new mongoose.Schema({
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
-        required: [true, 'El usuario es obligatorio']
+        required: true
     },
-    productos: [
-        {
-            producto: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Producto',
-                required: true
-            },
-            cantidad: {
-                type: Number,
-                required: true,
-                min: [1, 'La cantidad debe ser mayor a 0']
-            },
-            precio: {
-                type: Number,
-                required: true
-            }
-        }
-    ],
     subtotal: {
         type: Number,
-        required: [true, 'El subtotal es obligatorio']
+        required: true
     },
     impuestos: {
         type: Number,
-        required: [true, 'Los impuestos son obligatorios']
+        required: true
     },
     total: {
         type: Number,
-        required: [true, 'El total es obligatorio']
+        required: true
+    },
+    estado: {
+        type: String,
+        enum: ['Activo', 'Anulado'],
+        default: 'Activo'
     }
 }, {
     timestamps: true

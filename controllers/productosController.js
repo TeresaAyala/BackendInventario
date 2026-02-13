@@ -2,10 +2,22 @@ const Producto = require('../models/Producto');
 
 exports.createProducto = async (req, res) => {
     try {
-        const producto = new Producto(req.body);
+
+        const datos = {
+            ...req.body
+        };
+
+        if (req.file) {
+            datos.imagen = req.file.filename;
+        }
+
+        const producto = new Producto(datos);
         await producto.save();
 
-        res.status(201).json({ msg: 'Producto creado correctamente' });
+        res.status(201).json({
+            msg: 'Producto creado correctamente',
+            producto
+        });
 
     } catch (error) {
         if (error.name === 'ValidationError') {
@@ -55,11 +67,21 @@ exports.getProductoById = async (req, res) => {
 
 exports.updateProducto = async (req, res) => {
     try {
+
+        const datos = {
+            ...req.body
+        };
+
+        if (req.file) {
+            datos.imagen = req.file.filename;
+        }
+
         const producto = await Producto.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            datos,
             { new: true }
         );
+
         res.json(producto);
 
     } catch (error) {
@@ -71,6 +93,7 @@ exports.updateProducto = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 exports.deleteProducto = async (req, res) => {
     try {
