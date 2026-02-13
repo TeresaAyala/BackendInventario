@@ -10,7 +10,7 @@ exports.createUsuario = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUsuario = new User({ nombre, apellido, email, telefono,rol, status, password: hashedPassword });
+        const newUsuario = new Usuario({ nombre, apellido, email, telefono,rol, status, password: hashedPassword });
         await newUsuario.save();
 
         res.status(201).json({ msg: 'Usuario registrado exitosamente' });
@@ -38,14 +38,21 @@ exports.createUsuario = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const Usuario = await Usuario.findOne({ email,status:'active' });
-        if (!Usuario) return res.status(400).json({ msg: 'Usuario no encontrado' });
 
-        const validPass = await bcrypt.compare(password, Usuario.password);
+        const usuario = await Usuario.findOne({ email, status: 'active' });
+        if (!usuario) return res.status(400).json({ msg: 'Usuario no encontrado' });
+
+        const validPass = await bcrypt.compare(password, usuario.password);
         if (!validPass) return res.status(400).json({ msg: 'Contraseña incorrecta' });
 
-        const token = jwt.sign({ id: user._id, rol: user.rol, email: Usuario.email }, process.env.JWT_SECRET || 'secret_key', { expiresIn: '8h' });
-        res.json({ token, msg: "Bienvenido " + Usuario.nombre });
+        const token = jwt.sign(
+            { id: usuario._id, rol: usuario.rol, email: usuario.email },
+            process.env.JWT_SECRET || 'secret_key',
+            { expiresIn: '8h' }
+        );
+
+        res.json({ token, msg: "Bienvenido " + usuario.nombre });
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -58,8 +65,8 @@ exports.getUsuarios = async (req, res) => {
         if (nombre) query.nombre = { $regex: nombre, $options: 'i' };
         if (apellido) query.apellido = { $regex: apellido, $options: 'i' };
 
-        const Usuario = await Usuario.find(query);
-        res.json(Usuario);
+        const usuario = await Usuario.find(query);
+        res.json(usuario);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -67,8 +74,8 @@ exports.getUsuarios = async (req, res) => {
 exports.getUsuarioById = async (req, res) => {
     try {
         const Usuario = await Usuario.findById(req.params.id);
-        if(!Usuario) return res.status(404).json({msg: 'Usuario no encontrado'});
-        res.json(Usuario);
+        if(!usuario) return res.status(404).json({msg: 'Usuario no encontrado'});
+        res.json(usuario);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
