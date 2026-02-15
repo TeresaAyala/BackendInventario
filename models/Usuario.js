@@ -6,12 +6,12 @@ const usuarioSchema = new mongoose.Schema({
     email: { type: String, required: [true, 'El email es obligatorio'], unique: [true, 'El email ya existe'] },
     telefono: { type: String },
     password: { type: String, required: [true, 'La contraseña es obligatoria'] },
-rol: { 
+roles: { 
         type: String, 
        required: [true, 'El rol es obligatorio'],
         enum: {
         values: ['ADMIN', 'INVENTORY', 'SALES', ],
-        message: '{VALUE} no es un rol válido' // Mensaje de error personalizado
+        message: '{VALUE} no es un rol válido' 
     },
     default: 'SALES' },
     status: {

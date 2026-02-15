@@ -22,7 +22,7 @@ const auth = (req, res, next) => {
 
 const checkRole = (...rolesPermitidos) => {
     return (req, res, next) => {
-        if (!req.usuario || !rolesPermitidos.includes(req.usuario.rol)) {
+        if (!req.usuario || !rolesPermitidos.includes(req.usuario.roles)) {
             return res.status(403).json({ msg: "No tienes permisos de acceso" });
         } next();
     };

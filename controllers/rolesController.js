@@ -2,8 +2,8 @@ const Roles = require('../models/Roles');
 
 exports.createRoles = async (req, res) => {
     try {
-        const Roles = new Rol(req.body);
-        await Roles.save();
+        const roles = new Roles(req.body);
+        await roles.save();
 
         res.status(201).json({
             ok: true,

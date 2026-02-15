@@ -16,7 +16,7 @@ const createAdmin = async () => {
             apellido: 'Sistema',
             email: 'admin@correo.com',
             password: hashedPassword,
-            rol: 'ADMIN',
+            roles: 'ADMIN',
             status: 'active'
         });
 

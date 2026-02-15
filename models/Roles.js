@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const RolSchema = new mongoose.Schema({
+const RolesSchema = new mongoose.Schema({
     nombre: {
         type: String,
         required: [true, 'El nombre del rol es obligatorio'],
@@ -18,4 +18,4 @@ const RolSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Rol', RolSchema);
+module.exports = mongoose.model('Roles', RolesSchema);

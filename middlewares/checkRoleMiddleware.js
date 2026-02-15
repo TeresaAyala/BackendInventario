@@ -1,7 +1,7 @@
 const checkRole = (...rolesPermitidos) => {
     return (req, res, next) => {
         // 1. Verificar que el middleware de auth ya se ejecutó
-        if (!req.user) {
+        if (!req.usuario) {
             return res.status(500).json({
                 ok: false,
                 msg: 'Se intenta verificar el rol sin validar el token primero'
@@ -9,10 +9,10 @@ const checkRole = (...rolesPermitidos) => {
         }
 
         // 2. Extraer el rol del usuario (inyectado por el middleware de JWT)
-        const {rol, email} = req.user;
-        console.log({rol, email, rolesPermitidos});
+        const {roles, email} = req.usuario;
+        console.log({roles, email, rolesPermitidos});
         // 3. Verificar si el rol del usuario está dentro de los permitidos
-        if (!rolesPermitidos.includes(rol)) {
+        if (!rolesPermitidos.includes(roles)) {
             return res.status(403).json({
                 ok: false,
                 msg: `El usuario ${email} no tiene permisos de: [${rolesPermitidos}]`
