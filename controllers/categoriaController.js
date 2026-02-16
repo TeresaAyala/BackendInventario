@@ -1,11 +1,9 @@
 const Categoria = require('../models/Categoria');
 
-// Crear categoría
 exports.crearCategoria = async (req, res) => {
     try {
         const { nombre, descripcion } = req.body;
 
-        // Verificar si ya existe
         const existeCategoria = await Categoria.findOne({ nombre });
         if (existeCategoria) {
             return res.status(400).json({ msg: 'La categoría ya existe' });
@@ -79,7 +77,7 @@ exports.actualizarCategoria = async (req, res) => {
     }
 };
 
-// Eliminar categoría (borrado lógico)
+
 exports.eliminarCategoria = async (req, res) => {
     try {
         const categoria = await Categoria.findByIdAndUpdate(

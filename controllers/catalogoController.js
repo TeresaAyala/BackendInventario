@@ -48,11 +48,21 @@ exports.createCatalogo = async (req, res) => {
 exports.getCatalogos = async (req, res) => {
     try {
         const catalogos = await Catalogo.find({ estado: 'Activo' });
-        res.json(catalogos);
+
+        const catalogosConImagen = catalogos.map(cat => ({
+            ...cat._doc,
+            imagenUrl: cat.imagen
+                ? `${req.protocol}://${req.get('host')}/uploads/catalogo/${cat.imagen}`
+                : null
+        }));
+
+        res.json(catalogosConImagen);
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 
 exports.inactivarCatalogo = async (req, res) => {
