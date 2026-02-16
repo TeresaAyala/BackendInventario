@@ -14,10 +14,12 @@ connectDB().then(() => {
     createAdmin();
 });
 
-app.use(cors());
+
 app.use(express.json());
 
-// Rutas
+app.use(cors());
+
+
 app.use('/api/producto', require('./routes/productosRoutes'));
 app.use('/api/movimientosInventario', require('./routes/movimientosInventarioRoutes')); 
 app.use('/api/recibos', require('./routes/recibosRoutes'));
