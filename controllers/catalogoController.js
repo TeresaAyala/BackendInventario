@@ -2,31 +2,48 @@ const Catalogo = require('../models/Catalogo');
 
 exports.createCatalogo = async (req, res) => {
     try {
+        const { nombre, descripcion } = req.body;
 
-        const { codigo, nombre, descripcion } = req.body;
-
-        const existe = await Catalogo.findOne({ codigo });
-        if (existe) {
-            return res.status(400).json({ msg: 'El código ya existe' });
+        if (!nombre) {
+            return res.status(400).json({
+                msg: 'El nombre es obligatorio'
+            });
         }
 
-        const nuevaImagen = req.file ? req.file.filename : null;
+        const ultimoCatalogo = await Catalogo.findOne().sort({ createdAt: -1 });
+
+        let nuevoCodigo = "CAT-001";
+
+        if (ultimoCatalogo && ultimoCatalogo.codigo) {
+            const numero = parseInt(ultimoCatalogo.codigo.split('-')[1]);
+            const siguiente = numero + 1;
+            nuevoCodigo = `CAT-${String(siguiente).padStart(3, '0')}`;
+        }
+
+        const imagen = req.file ? req.file.filename : null;
 
         const nuevoCatalogo = new Catalogo({
-            codigo,
+            codigo: nuevoCodigo,
             nombre,
             descripcion,
-            imagen: nuevaImagen
+            imagen
         });
 
         await nuevoCatalogo.save();
 
-        res.status(201).json(nuevoCatalogo);
+        res.status(201).json({
+            msg: 'Catálogo creado correctamente',
+            catalogo: nuevoCatalogo
+        });
 
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({
+            msg: 'Error al crear el catálogo',
+            error: error.message
+        });
     }
 };
+
 
 exports.getCatalogos = async (req, res) => {
     try {

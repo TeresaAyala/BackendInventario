@@ -9,10 +9,10 @@ const ProveedoresSchema = new mongoose.Schema({
     telefono: String,
     email: String,
     direccion: String,
-    tipo: {
-        type: String,
-        enum: ['MATERIA PRIMA', 'LOGISTICA', 'OFICINA', 'ELECTRONICA'],
-        default: 'OFICINA'
+    categoria: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Categoria',
+        required: true
     },
     estado: {
         type: Boolean,

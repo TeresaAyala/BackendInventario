@@ -35,29 +35,6 @@ exports.createUsuario = async (req, res) => {
   }
 };
 
-/*exports.login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        const usuario = await Usuario.findOne({ email, status: 'active' });
-        if (!usuario) return res.status(400).json({ msg: 'Usuario no encontrado' });
-
-        const validPass = await bcrypt.compare(password, usuario.password);
-        if (!validPass) return res.status(400).json({ msg: 'Contraseña incorrecta' });
-
-        const token = jwt.sign(
-            { id: usuario._id, roles: usuario.rol, email: usuario.email },
-            process.env.JWT_SECRET || 'secret_key',
-            { expiresIn: '8h' }
-        );
-
-        res.json({ token, msg: "Bienvenido " + usuario.nombre });
-
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};*/
-
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -104,15 +81,23 @@ exports.getUsuarios = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 exports.getUsuarioById = async (req, res) => {
   try {
-    const Usuario = await Usuario.findById(req.params.id);
-    if (!usuario) return res.status(404).json({ msg: 'Usuario no encontrado' });
+    const usuario = await Usuario.findById(req.params.id);
+
+    if (!usuario) {
+      return res.status(404).json({ msg: 'Usuario no encontrado' });
+    }
+
     res.json(usuario);
+
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 exports.updateUsuario = async (req, res) => {
   try {

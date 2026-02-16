@@ -4,9 +4,10 @@ const router = express.Router();
 const detalleReciboController = require('../controllers/detalleReciboController');
 const { auth, checkRole } = require('../middlewares/authMiddleware');
 
-router.post('/',auth,checkRole('ADMIN', 'EMPLEADO'),detalleReciboController.createDetalle);
-router.get('/recibo/:reciboId',auth,checkRole('ADMIN', 'EMPLEADO'),detalleReciboController.getDetallesByRecibo);
-router.put('/inactivar/:id',auth, checkRole('ADMIN'),detalleReciboController.inactivarDetalle);
 
+router.get('/recibo/:reciboId',auth,checkRole('ADMIN', 'INVENTORY'),detalleReciboController.getDetallesByRecibo);
+router.post('/',auth,checkRole('ADMIN', 'INVENTORY'),detalleReciboController.createDetalle);
+router.put('/:id/inactivar',auth,checkRole('ADMIN'),detalleReciboController.inactivarDetalle);
 
 module.exports = router;
+

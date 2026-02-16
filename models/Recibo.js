@@ -7,32 +7,48 @@ const ReciboSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+
     fecha: {
         type: Date,
         default: Date.now
     },
+
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuario',
         required: true
     },
+
+    cliente: {  
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cliente',
+        required: true
+    },
+
     subtotal: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
+
     impuestos: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
+
     total: {
         type: Number,
-        required: true
+        required: true,
+        default: 0
     },
+
     estado: {
         type: String,
         enum: ['Activo', 'Anulado'],
         default: 'Activo'
     }
+
 }, {
     timestamps: true
 });

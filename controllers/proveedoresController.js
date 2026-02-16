@@ -1,22 +1,29 @@
 const Proveedores = require('../models/Proveedores');
 
 exports.getProveedores = async (req, res) => {
-    try {
-        const lista = await Proveedores.find({ estado: true }).sort({ createdAt: -1 });
-        res.json(lista);
-    }
-    catch (error) {
-        res.status(500).json({ msg: 'Error' });
-    }
+  try {
+
+    const lista = await Proveedores.find({ estado: true })
+      .populate('categoria', 'nombre') 
+      .sort({ createdAt: -1 });
+
+    res.json(lista);
+
+  } catch (error) {
+    res.status(500).json({ msg: 'Error' });
+  }
 };
 
 exports.getProveedorById = async (req, res) => {
     try {
-        const Proveedores = await Proveedores.findById(req.params.id);
-        if (!Proveedores) {
+        const proveedor = await Proveedores.findById(req.params.id)
+            .populate('categoria', 'nombre'); 
+
+        if (!proveedor) {
             return res.status(404).json({ msg: 'Proveedor no encontrado' });
         }
-        res.json(Proveedores);
+
+        res.json(proveedor);
 
     } catch (error) {
         res.status(500).json({ error: error.message });
